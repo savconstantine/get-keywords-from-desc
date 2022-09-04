@@ -27,7 +27,7 @@
       <div class="flex items-center flex-wrap">
         <div
           v-for="(tag, index) in wordsToBeCut.slice().reverse()"
-          class="bg-gray-800 px-4 py-2 mr-1 mb-1 rounded-full flex"
+          class="bg-gray-200 dark:bg-gray-800 px-4 py-2 mr-1 mb-1 rounded-full flex"
           :key="index"
         >
           {{ tag }}
@@ -36,7 +36,7 @@
             @click="deleteTag(tag)"
             class="ml-2 w-5 -mt-1 pt-1 -mr-2"
           >
-            <removeBtnSvg alt="Konstantin Savusia" class="logo" />
+            <removeBtnSvg alt="Konstantin Savusia" class="remove-btn-svg" />
           </button>
         </div>
         <span class="py-2 invisible">:</span>
