@@ -69,9 +69,10 @@ export const useKeywordsStore = defineStore({
       }
       
       const localStorageWordsToIgnore = localStorage.getItem('wordsToIgnore')
-      if (localStorageWordsToIgnore) {
-        state.wordsToIgnore = JSON.parse(localStorageWordsToIgnore)
-        return state.wordsToIgnore
+      if (typeof localStorageWordsToIgnore !== 'undefined' && localStorageWordsToIgnore) {
+        try {
+          state.wordsToIgnore = JSON.parse(localStorageWordsToIgnore)
+          return state.wordsToIgnore
       }
 
       state.wordsToIgnore = [...state.defaultWordsToIgnore]
