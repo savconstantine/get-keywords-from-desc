@@ -42,13 +42,20 @@
 </template>
 
 <script>
+import { storeToRefs } from "pinia";
 import { useKeywordsStore } from "../stores/keywords";
 
 export default {
-  data() {
+  data: () => ({
+    keywords: "",
+    text: "",
+  }),
+  setup() {
+    const keywordsStore = useKeywordsStore();
+    const { getWordsToIgnore } = storeToRefs(keywordsStore);
+
     return {
-      keywords: "",
-      text: "",
+      wordsToBeCut: getWordsToIgnore,
     };
   },
   computed: {
@@ -56,11 +63,13 @@ export default {
       if (this.keywords.length > 0) return this.keywords;
       return "Keywords will be generated here";
     },
-    getWordsToIgnore() {
-      return useKeywordsStore().wordsToIgnore;
-    },
   },
-  mounted() {},
+  mounted() {
+    const keywordsStore = useKeywordsStore();
+    keywordsStore.$subscribe(() => {
+      this.generateKeywords();
+    });
+  },
   methods: {
     generateKeywords() {
       let desc = " " + this.text;
@@ -72,7 +81,7 @@ export default {
       desc = desc.replace(new RegExp(/”/g), "");
       desc = Array.from(new Set(desc.split(","))).toString();
       desc = desc.replace(new RegExp(/\./g), "");
-      const mappedUnforgivable = this.getWordsToIgnore.map(
+      const mappedUnforgivable = this.wordsToBeCut.map(
         (word) => " " + word + ","
       );
       desc = desc.replace(new RegExp(mappedUnforgivable.join("|"), "g"), "");

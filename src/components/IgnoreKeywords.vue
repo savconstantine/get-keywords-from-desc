@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "pinia";
+import { mapActions, storeToRefs } from "pinia";
 import { useKeywordsStore } from "@/stores/keywords";
 import removeBtnSvg from "../assets/remove-button-svgrepo-com.svg";
 
@@ -57,29 +57,28 @@ export default {
   },
   setup() {
     const keywordsStore = useKeywordsStore();
+    const { getWordsToIgnore } = storeToRefs(keywordsStore);
 
     return {
-      wordsToBeCut: keywordsStore.getWordsToIgnore,
+      wordsToBeCut: getWordsToIgnore,
       newTag: "",
     };
   },
   methods: {
     ...mapActions(useKeywordsStore, ["setWordsToIgnore", "resetWordsToIgnore"]),
-    ...mapState(useKeywordsStore, ["wordsToIgnore"]),
     addTag() {
       if (!this.newTag) return;
-      this.wordsToBeCut.push(this.newTag);
-      this.setWordsToIgnore(this.wordsToBeCut);
+      const wordsToIgnore = [...this.wordsToBeCut, this.newTag];
+      this.setWordsToIgnore(wordsToIgnore);
       this.newTag = "";
     },
     deleteTag(tag) {
-      this.wordsToBeCut.splice(this.wordsToBeCut.indexOf(tag), 1);
-      this.setWordsToIgnore(this.wordsToBeCut);
+      const wordsToIgnore = [...this.wordsToBeCut];
+      wordsToIgnore.splice(wordsToIgnore.indexOf(tag), 1)
+      this.setWordsToIgnore(wordsToIgnore);
     },
     resetIgnoreKeywords() {
       this.resetWordsToIgnore();
-      this.wordsToBeCut = this.wordsToIgnore();
-      this.$forceUpdate()
     },
   },
 };
