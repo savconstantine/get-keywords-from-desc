@@ -4,6 +4,15 @@ export const useKeywordsStore = defineStore({
   id: 'keywords',
   state: () => ({
     defaultWordsToIgnore: [
+      "2017",
+      "2018",
+      "2019",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "2025",
       "to",
       "the",
       "at",
