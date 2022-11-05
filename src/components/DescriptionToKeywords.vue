@@ -30,12 +30,10 @@
         {{ getKeywords }}
       </div>
     </div>
-    <button
-      @click.stop.prevent="copyKeywords"
-      type="button"
-      class="py-3 px-5 text-sm font-medium text-center text-white rounded-lg bg-primary-700 sm:w-fit hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-    >
-      Copy Generated Keywords
+    <button @click.stop.prevent="copyKeywords" type="button"
+      class="w-full py-3 px-5 text-sm font-medium text-center text-white rounded-lg  focus:ring-4 focus:outline-none transition-all ease-in duration-300"
+      :class="{ 'bg-primary-700 hover:bg-primary-800 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800': copyButtonTextState === 'default', 'bg-green-500 hover:bg-green-600 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800': copyButtonTextState === 'copied', 'bg-red-500 hover:bg-red-600 focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-700': copyButtonTextState === 'error' || copyButtonTextState === 'noKeywords' }">
+      {{ getButtonTextState }}
     </button>
     <input id="block-to-copy" type="hidden" :value="keywords" />
   </div>
@@ -49,6 +47,13 @@ export default {
   data: () => ({
     keywords: "",
     text: "",
+    copyButtonTextState: 'default',
+    copyButtonText: {
+      default: "Copy Generated Keywords",
+      copied: "Copied!",
+      error: 'Error! Try again',
+      noKeywords: 'Add some description to generate keywords'
+    }
   }),
   setup() {
     const keywordsStore = useKeywordsStore();
@@ -63,6 +68,9 @@ export default {
       if (this.keywords.length > 0) return this.keywords;
       return "Keywords will be generated here";
     },
+    getButtonTextState() {
+      return this.copyButtonText[this.copyButtonTextState];
+    }
   },
   mounted() {
     const keywordsStore = useKeywordsStore();
@@ -96,16 +104,31 @@ export default {
     },
     copyKeywords() {
       const blockToCopy = document.querySelector("#block-to-copy");
-      blockToCopy.setAttribute("type", "text"); // hidden
-      blockToCopy.select();
-      try {
-        document.execCommand("copy");
-      } catch (err) {
-        alert("Oops, unable to copy");
+      if (this.keywords.length > 0) {
+        blockToCopy.setAttribute("type", "text"); // hidden
+        blockToCopy.select();
+        try {
+          document.execCommand("copy");
+          this.copyButtonTextState = 'copied';
+          setTimeout(() => {
+            this.copyButtonTextState = 'default';
+          }, 5000);
+        } catch (err) {
+          alert("Oops, unable to copy");
+          this.copyButtonTextState = 'error';
+          setTimeout(() => {
+            this.copyButtonTextState = 'default';
+          }, 10000);
+        }
+        /* unselect the range */
+        blockToCopy.setAttribute("type", "hidden");
+        window.getSelection().removeAllRanges();
+      } else {
+        this.copyButtonTextState = 'noKeywords';
+        setTimeout(() => {
+          this.copyButtonTextState = 'default';
+        }, 5000);
       }
-      /* unselect the range */
-      blockToCopy.setAttribute("type", "hidden");
-      window.getSelection().removeAllRanges();
     },
   },
 };
