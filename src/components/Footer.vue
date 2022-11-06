@@ -8,7 +8,7 @@ import KonstantinSavusiaLogoSVG from "@/assets/konstantinsavusia.svg?component";
       class="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800 lg:py-14"
     >
       <div class="flex justify-center flex-col items-center">
-        <KonstantinSavusiaLogoSVG alt="Konstantin Savusia" class="konstantin-savusia-logo" />
+        <KonstantinSavusiaLogoSVG alt="Konstantin Savusia" class="konstantin-savusia-logo px-5 sm:px-0" />
         <div class="flex mt-5 gap-5">
           <a href="https://github.com/savconstantine" target="_blank">
             <img
