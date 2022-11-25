@@ -1,9 +1,14 @@
 import { defineStore } from 'pinia'
 
+export const ERROR_STATE_DEFAULT = "default"
+export const ERROR_STATE_COPIED = "copied";
+export const ERROR_STATE_ERROR = "error";
+export const ERROR_STATE_NOKEYWORDS = "noKeywords";
+
 export const useErrorsStore = defineStore({
   id: "errors",
   state: () => ({
-    copyButtonTextState: "default",
+    copyButtonTextState: ERROR_STATE_DEFAULT,
     copyButtonText: {
       default: "Copy Generated Keywords",
       copied: "Copied!",
@@ -13,15 +18,15 @@ export const useErrorsStore = defineStore({
   }),
   getters: {
     getCopyButtonTextState() {
-      return this.copyButtonTextState
+      return this.copyButtonTextState;
     },
     getCopyButtonText() {
-      return this.copyButtonText[this.copyButtonTextState]
+      return this.copyButtonText[this.copyButtonTextState];
     },
   },
   actions: {
     setCopyButtonTextState(state) {
-      this.copyButtonTextState = state
-    }
+      this.copyButtonTextState = state;
+    },
   },
 });
