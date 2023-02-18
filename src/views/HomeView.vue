@@ -1,6 +1,17 @@
 <script setup>
-import IgnoreKeywords from "@/components/IgnoreKeywords.vue";
-import DescriptionToKeywords from "@/components/DescriptionToKeywords.vue";
+import { defineAsyncComponent } from 'vue'
+
+import Loading from "@/components/Loading.vue";
+
+const IgnoreKeywords = defineAsyncComponent({
+  loader: () => import('@/components/IgnoreKeywords.vue'),
+  loadingComponent: Loading
+})
+
+const DescriptionToKeywords = defineAsyncComponent({
+  loader: () => import('@/components/DescriptionToKeywords.vue'),
+  loadingComponent: Loading
+})
 </script>
 
 <template>

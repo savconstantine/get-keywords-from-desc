@@ -1,8 +1,17 @@
 <script setup>
-import { ref } from "vue";
+import { ref, defineAsyncComponent } from "vue";
 import { RouterLink, RouterView } from "vue-router";
-import Header from "./components/Header.vue";
-import Footer from "./components/Footer.vue";
+import Loading from "./components/Loading.vue";
+
+const Header = defineAsyncComponent({
+  loader: () => import('./components/Header.vue'),
+  loadingComponent: Loading
+})
+
+const Footer = defineAsyncComponent({
+  loader: () => import('./components/Footer.vue'),
+  loadingComponent: Loading
+})
 
 const changeDarkLightMode = () => {
   isDark.value = !isDark.value;
